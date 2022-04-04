@@ -1,14 +1,21 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import ReactDOMClient from 'react-dom/client';
+import { BrowserRouter } from "react-router-dom";
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
+import reportWebVitals from './reportWebVitals';
+import { App } from "./pages/App";
+
+const container = document.getElementById('root');
+
+// We have to use as HTMLElement here in order to prevent a null assertion
+// as we're certain root will exist.
+const root =  ReactDOMClient.createRoot(container as HTMLElement);
+
+// Render the app
+root.render(
+  <BrowserRouter>
+    <App/>
+  </BrowserRouter>
 );
 
 // If you want to start measuring performance in your app, pass a function
