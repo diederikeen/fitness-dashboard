@@ -18,10 +18,7 @@ const AuthContext = createContext<IAuthContext | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const authToken = localStorage.getItem("auth-token");
-  // We can ignore it as we skip it if there is no token, there for we
-  // only make this call when there is a token in place.
 
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const { data } = useGetProfileQuery(authToken ?? skipToken, {
     skip: !authToken,
   });
