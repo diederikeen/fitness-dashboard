@@ -1,21 +1,27 @@
-import React from 'react';
-import ReactDOMClient from 'react-dom/client';
+import React from "react";
+import ReactDOMClient from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import { ApiProvider } from "@reduxjs/toolkit/query/react";
 
-import reportWebVitals from './reportWebVitals';
+import reportWebVitals from "./reportWebVitals";
+
 import { App } from "./pages/App";
 
-const container = document.getElementById('root');
+import { authApi } from "./common/utils/api";
 
+// Set container
 // We have to use as HTMLElement here in order to prevent a null assertion
 // as we're certain root will exist.
-const root =  ReactDOMClient.createRoot(container as HTMLElement);
+const container = document.getElementById("root") as HTMLElement;
+const root = ReactDOMClient.createRoot(container);
 
 // Render the app
 root.render(
-  <BrowserRouter>
-    <App/>
-  </BrowserRouter>
+  <ApiProvider api={authApi}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </ApiProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
