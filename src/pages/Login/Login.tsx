@@ -4,6 +4,8 @@ import * as yup from "yup";
 
 import { useAuth } from "../../common/hooks/Auth";
 import { useNavigate } from "react-router-dom";
+import React from "react";
+import { TextField } from "../../common/components/TextField";
 
 interface IFormInputs {
   email: string;
@@ -19,7 +21,6 @@ const schema = yup
 
 export function Login() {
   const {
-    register,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInputs>({
@@ -31,7 +32,7 @@ export function Login() {
 
   const onSubmit: SubmitHandler<IFormInputs> = (data) =>
     auth
-      .useLogin({
+      ?.useLogin({
         ...data,
       })
       .then((res) => {
@@ -44,11 +45,18 @@ export function Login() {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <input {...register("email")} />
-        <p>{errors.email?.message}</p>
+        <TextField
+          name="email"
+          type="email"
+          error={errors["email"]?.message}
+          label="Email"
+        />
 
-        <input {...register("password")} />
-        <p>{errors.password?.message}</p>
+        <TextField
+          name="password"
+          error={errors["password"]?.message}
+          label="Password"
+        />
 
         <input type="submit" />
       </form>
