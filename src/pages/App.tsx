@@ -1,26 +1,48 @@
 import { Route, Routes } from "react-router-dom";
+import { globalCss, styled } from "@stitches/react";
 
 import { LandingsPage } from "./LadingsPage";
 import { Login } from "./Login";
 
-import { RequireAuth } from "../common/components/RequiredAuth";
 import { AuthProvider } from "../common/hooks/Auth";
 
-export function App() {
-  return (
-    <AuthProvider>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <RequireAuth>
-              <LandingsPage />
-            </RequireAuth>
-          }
-        />
+import { theme } from "../theme";
+import { Masthead } from "../common/components/Masthead";
+import { Sidebar } from "../common/components/Sidebar";
 
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </AuthProvider>
+const globalStyles = globalCss({
+  "*": {
+    margin: 0,
+    padding: 0,
+  },
+  body: {
+    fontFamily: "Anek Tamil",
+    "-webkit-font-smoothing": "antialiased",
+    backgroundColor: "$grey400",
+  },
+});
+
+const Layout = styled("div", {
+  display: "grid",
+  gridTemplateRows: "[mast-head] 0px [main-content] 1fr",
+  gridTemplateColumns: "[side-bar] 280px [content] 1fr",
+});
+
+export function App() {
+  globalStyles();
+
+  return (
+    <div className={theme}>
+      <Layout>
+        <Masthead />
+        <Sidebar />
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<LandingsPage />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </AuthProvider>
+      </Layout>
+    </div>
   );
 }
