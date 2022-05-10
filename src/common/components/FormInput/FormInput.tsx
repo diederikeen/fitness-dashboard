@@ -6,15 +6,30 @@ import { FlexBox } from "../FlexBox";
 const StyledInput = styled("input", {
   height: "34px",
   borderRadius: "$sm",
-  border: "none",
   boxShadow: "none",
   padding: "0 $lg",
+  border: "1px solid transparent",
+
+  variants: {
+    error: {
+      true: {
+        border: "1px solid $error",
+      },
+    },
+  },
 });
 
 const StyledLabel = styled("label", {
   textTransform: "uppercase",
   fontSize: "12px",
   fontWeight: "700",
+  variants: {
+    error: {
+      true: {
+        color: "$error",
+      },
+    },
+  },
 });
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
@@ -24,19 +39,22 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
 }
 
 export function FormInput({ name, label, error, ...rest }: Props) {
+  const hasError = Boolean(error);
   return (
     <ConnectForm>
       {({ register }) => (
         <FlexBox dir="col">
           {label && (
             <div>
-              <StyledLabel htmlFor={name}>{label}</StyledLabel>
+              <StyledLabel error={hasError} htmlFor={name}>
+                {label}
+              </StyledLabel>
             </div>
           )}
 
-          <StyledInput {...register(name)} {...rest} />
+          <StyledInput error={hasError} {...register(name)} {...rest} />
 
-          {error ?? <p>{error}</p>}
+          {error ?? <p style={{ color: "red" }}>{error}</p>}
         </FlexBox>
       )}
     </ConnectForm>

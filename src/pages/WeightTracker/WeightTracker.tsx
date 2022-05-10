@@ -10,10 +10,7 @@ import {
 
 import { useAuth } from "../../common/hooks/Auth";
 import { StyledCard } from "../../common/components/StyledCard";
-import {
-  FormComposition,
-  SchemaType,
-} from "../../common/components/FormComposition";
+import { FormComposition } from "../../common/components/FormComposition";
 import { skipToken } from "@reduxjs/toolkit/query";
 
 const PageTitle = styled("h2", {
@@ -33,7 +30,7 @@ const validationScheme = yup.object({
   date: yup.date().default(() => new Date()),
 });
 
-const formSchema: SchemaType = {
+const formSchema = {
   fields: [
     {
       ns: "weight",
@@ -41,6 +38,7 @@ const formSchema: SchemaType = {
       label: "Weight",
       inputProps: {
         step: "0.01",
+        min: 0,
       },
     },
     {

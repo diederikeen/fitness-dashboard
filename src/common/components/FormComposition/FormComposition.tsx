@@ -24,7 +24,7 @@ type InputProps = InputHTMLAttributes<HTMLInputElement>;
 export interface SchemaType {
   fields: Array<{
     ns: string;
-    type: FieldType;
+    type: string;
     label?: string;
     // defaults to FormInput
     component?: ElementType;
@@ -35,7 +35,7 @@ export interface SchemaType {
   validation: AnyObjectSchema;
 }
 
-type FieldType = "text" | "number" | "date" | "email" | "password";
+export type FieldType = "text" | "number" | "date" | "email" | "password";
 
 interface FormCompositionProps<T> {
   schema: SchemaType;
@@ -70,11 +70,14 @@ export function FormComposition<T>({
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const error = formErrors[ns];
-
             return (
               <Composition key={ns}>
-                {error && <p>{error.message}</p>}
-                <Component name={ns} {...inputProps} {...rest} />
+                <Component
+                  error={error?.message}
+                  name={ns}
+                  {...inputProps}
+                  {...rest}
+                />
               </Composition>
             );
           }

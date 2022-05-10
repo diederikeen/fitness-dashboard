@@ -87,11 +87,12 @@ export const authApi = createApi({
       },
       invalidatesTags: ["User"],
     }),
-    getProfile: build.query<UserResponse, unknown>({
-      query: () => {
+    getProfile: build.query<UserResponse, string>({
+      query: (token) => {
         return getHeaders({
           url: "/api/user",
           method: "get",
+          token,
         });
       },
       providesTags: (result) => (result ? ["User"] : []),
