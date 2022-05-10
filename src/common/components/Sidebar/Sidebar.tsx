@@ -1,7 +1,6 @@
 import { styled } from "@stitches/react";
-import HomeIcon from "@mui/icons-material/Home";
 import { NavLink } from "react-router-dom";
-import { GraphicEq } from "@mui/icons-material";
+import { Dashboard, GraphicEq } from "@mui/icons-material";
 
 const SidebarStyles = styled("aside", {
   gridRowStart: "main-content",
@@ -13,7 +12,7 @@ const SidebarStyles = styled("aside", {
 const StyledNavLink = styled(NavLink, {
   padding: "$md $lg",
 
-  borderRadius: "8px",
+  borderRadius: "$default",
 
   color: "white",
   textDecoration: "none",
@@ -45,19 +44,21 @@ function Link({ to, children }: { to: string; children: JSX.Element }) {
 export function Sidebar() {
   return (
     <SidebarStyles>
-      <Link to="/">
-        <>
-          <HomeIcon />
-          <span>Dashboard</span>
-        </>
-      </Link>
+      <nav>
+        <Link to="/">
+          <>
+            <Dashboard />
+            <span>Dashboard</span>
+          </>
+        </Link>
 
-      <Link to="/weight">
-        <>
-          <GraphicEq />
-          <span>Your weight</span>
-        </>
-      </Link>
+        <Link to="/weight-tracker">
+          <>
+            <GraphicEq />
+            <span>Weight Tracker</span>
+          </>
+        </Link>
+      </nav>
     </SidebarStyles>
   );
 }

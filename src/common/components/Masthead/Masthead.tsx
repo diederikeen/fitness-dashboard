@@ -1,7 +1,6 @@
 import { styled } from "@stitches/react";
 
 const StyledMastHead = styled("header", {
-  // backgroundColor: "$grey100",
   gridColumn: "1/-1",
   padding: "0 $md",
   display: "flex",

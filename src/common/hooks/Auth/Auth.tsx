@@ -11,6 +11,7 @@ import { skipToken } from "@reduxjs/toolkit/query";
 
 interface IAuthContext {
   user?: UserResponse;
+  token?: string;
   useLogin: CustomUseMutation<LoginPayload, LoginResponse>;
 }
 
@@ -25,7 +26,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const [useLogin] = useLoginMutation();
 
-  const contextValue = { user: data, useLogin };
+  const contextValue = {
+    user: data,
+    useLogin,
+    token: authToken ? authToken : undefined,
+  };
 
   return (
     <AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>

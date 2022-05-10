@@ -1,3 +1,3 @@
 export function LandingsPage() {
-  return <div>Landing</div>;
+  return <div>Landingspage</div>;
 }

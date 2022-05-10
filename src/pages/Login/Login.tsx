@@ -1,36 +1,50 @@
-import { SubmitHandler, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+
+import { SubmitHandler } from "react-hook-form";
 import * as yup from "yup";
 
 import { useAuth } from "../../common/hooks/Auth";
-import { useNavigate } from "react-router-dom";
-import React from "react";
-import { TextField } from "../../common/components/TextField";
+import {
+  FormComposition,
+  SchemaType,
+} from "../../common/components/FormComposition";
+import { StyledCard } from "../../common/components/StyledCard";
 
-interface IFormInputs {
+interface FormFields {
   email: string;
   password: string;
+  firstName?: string;
 }
 
-const schema = yup
+const validationSchema = yup
   .object({
     email: yup.string().email().required(),
     password: yup.string().min(8).required(),
   })
   .required();
 
-export function Login() {
-  const {
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IFormInputs>({
-    resolver: yupResolver(schema),
-  });
+const schema: SchemaType = {
+  fields: [
+    {
+      ns: "email",
+      type: "email",
+      label: "Email",
+    },
+    {
+      ns: "password",
+      type: "password",
+      label: "Password",
+    },
+  ],
+  validation: validationSchema,
+};
 
+export function Login() {
   const navigate = useNavigate();
   const auth = useAuth();
 
-  const onSubmit: SubmitHandler<IFormInputs> = (data) =>
+  const onSubmit: SubmitHandler<FormFields> = (data) =>
     auth
       ?.useLogin({
         ...data,
@@ -43,23 +57,13 @@ export function Login() {
       .then(() => navigate("/"));
 
   return (
-    <>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <TextField
-          name="email"
-          type="email"
-          error={errors["email"]?.message}
-          label="Email"
-        />
-
-        <TextField
-          name="password"
-          error={errors["password"]?.message}
-          label="Password"
-        />
-
-        <input type="submit" />
-      </form>
-    </>
+    <StyledCard>
+      <FormComposition<FormFields>
+        schema={schema}
+        submit={onSubmit}
+        title="Login"
+        button="Log in"
+      />
+    </StyledCard>
   );
 }

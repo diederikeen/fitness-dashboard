@@ -3,12 +3,15 @@ import { globalCss, styled } from "@stitches/react";
 
 import { LandingsPage } from "./LadingsPage";
 import { Login } from "./Login";
+import { WeightTracker } from "./WeightTracker";
+
+import { Masthead } from "../common/components/Masthead";
+import { Sidebar } from "../common/components/Sidebar";
 
 import { AuthProvider } from "../common/hooks/Auth";
 
 import { theme } from "../theme";
-import { Masthead } from "../common/components/Masthead";
-import { Sidebar } from "../common/components/Sidebar";
+import { RequireAuth } from "../common/components/RequiredAuth";
 
 const globalStyles = globalCss({
   "*": {
@@ -28,21 +31,38 @@ const Layout = styled("div", {
   gridTemplateColumns: "[side-bar] 280px [content] 1fr",
 });
 
+const MainContent = styled("main", {
+  padding: "$xlg $xxxlg $xlg $xxxlg",
+  maxWidth: "calc(1600px - 128px * 2 - 280px)",
+  width: "100%",
+  margin: "0 auto",
+});
+
 export function App() {
   globalStyles();
 
   return (
-    <div className={theme}>
-      <Layout>
-        <Masthead />
-        <Sidebar />
-        <AuthProvider>
-          <Routes>
-            <Route path="/" element={<LandingsPage />} />
-            <Route path="/login" element={<Login />} />
-          </Routes>
-        </AuthProvider>
-      </Layout>
-    </div>
+    <AuthProvider>
+      <div className={theme}>
+        <Layout>
+          <Masthead />
+          <Sidebar />
+          <MainContent>
+            <Routes>
+              <Route path="/" element={<LandingsPage />} />
+              <Route path="/login" element={<Login />} />
+              <Route
+                path="/weight-tracker"
+                element={
+                  <RequireAuth>
+                    <WeightTracker />
+                  </RequireAuth>
+                }
+              />
+            </Routes>
+          </MainContent>
+        </Layout>
+      </div>
+    </AuthProvider>
   );
 }
