@@ -14,6 +14,7 @@ import {
   FormComposition,
   SchemaType,
 } from "../../common/components/FormComposition";
+import { skipToken } from "@reduxjs/toolkit/query";
 
 const PageTitle = styled("h2", {
   fontSize: " 32px",
@@ -58,7 +59,7 @@ export function WeightTracker() {
   const auth = useAuth();
   const [addWeight] = useAddWeightMutation();
 
-  const { data } = useGetWeightQuery(auth?.token);
+  const { data } = useGetWeightQuery(auth?.token || skipToken);
 
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     return addWeight(data);

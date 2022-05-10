@@ -39,14 +39,13 @@ function getHeaders<T>({
   url,
   method,
   data,
+  token,
 }: {
   url: string;
   method: "post" | "get" | "update";
   token?: string;
   data?: T;
 }) {
-  const authToken = localStorage.getItem("auth-token");
-
   const header = {
     url,
     method,
@@ -55,12 +54,12 @@ function getHeaders<T>({
     },
   };
 
-  authToken &&
+  token &&
     Object.assign(header, {
       ...header,
       headers: {
         ...header.headers,
-        "auth-token": authToken,
+        "auth-token": token,
       },
     });
 

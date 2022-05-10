@@ -71,7 +71,6 @@ export function FormComposition<T>({
             // @ts-ignore
             const error = formErrors[ns];
 
-            console.log(inputProps);
             return (
               <Composition key={ns}>
                 {error && <p>{error.message}</p>}
