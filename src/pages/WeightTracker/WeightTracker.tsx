@@ -27,7 +27,10 @@ interface FormFields {
 
 const validationScheme = yup.object({
   weight: yup.number().positive().required().typeError("Weight is required"),
-  date: yup.date().default(() => new Date()),
+  date: yup
+    .date()
+    .max(new Date(), "Date is wrong")
+    .default(() => new Date()),
 });
 
 const formSchema = {
@@ -70,13 +73,12 @@ export function WeightTracker() {
         <h3 color="$primaryText">Add new record</h3>
         <FormComposition<FormFields> schema={formSchema} submit={onSubmit} />
       </StyledCard>
-      <div style={{ marginTop: "100px" }}>
-        {data?.map((record, index) => (
-          <p key={index}>
-            {record.weight} - {format(new Date(record.date), "dd-LL-yyyy")}
-          </p>
-        ))}
-      </div>
+
+      {data?.map((result, index) => (
+        <div key={index}>
+          {result.date} — {result.weight}
+        </div>
+      ))}
     </>
   );
 }

@@ -67,6 +67,7 @@ export function FormComposition<T>({
             inputProps,
             ...rest
           }) => {
+            // TODO: Fix linting error
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore
             const error = formErrors[ns];

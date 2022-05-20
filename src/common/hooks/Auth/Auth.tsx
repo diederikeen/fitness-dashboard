@@ -20,7 +20,7 @@ const AuthContext = createContext<IAuthContext | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const authToken = localStorage.getItem("auth-token");
 
-  const { data } = useGetProfileQuery(authToken ? authToken : skipToken, {
+  const { data } = useGetProfileQuery(authToken ?? skipToken, {
     skip: !authToken,
   });
 
