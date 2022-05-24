@@ -7,6 +7,7 @@ import {
   FetchBaseQueryMeta,
   MutationDefinition,
 } from "@reduxjs/toolkit/query";
+import { getToken } from "../token/token";
 const baseUrl = "/";
 
 export interface UserResponse {
@@ -39,13 +40,14 @@ function getHeaders<T>({
   url,
   method,
   data,
-  token,
 }: {
   url: string;
   method: "post" | "get" | "update";
   token?: string;
   data?: T;
 }) {
+  const token = getToken();
+
   const header = {
     url,
     method,
@@ -107,12 +109,11 @@ export const authApi = createApi({
       },
       invalidatesTags: ["User"],
     }),
-    getWeight: build.query<WeightResponse[], string>({
-      query: (token) => {
+    getWeight: build.query<WeightResponse[], void>({
+      query: () => {
         return getHeaders({
           method: "get",
           url: "/api/weight",
-          token,
         });
       },
       transformResponse: ({ data }) => data,

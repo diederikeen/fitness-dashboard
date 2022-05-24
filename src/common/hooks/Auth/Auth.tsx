@@ -1,3 +1,6 @@
+import React, { createContext, useContext } from "react";
+import { skipToken } from "@reduxjs/toolkit/query";
+
 import {
   CustomUseMutation,
   LoginPayload,
@@ -6,20 +9,18 @@ import {
   useLoginMutation,
   UserResponse,
 } from "../../utils/api";
-import React, { createContext, useContext } from "react";
-import { skipToken } from "@reduxjs/toolkit/query";
+
+import { getToken } from "../../utils/token/token";
 
 interface IAuthContext {
   user?: UserResponse;
-  token?: string;
   useLogin: CustomUseMutation<LoginPayload, LoginResponse>;
 }
 
 const AuthContext = createContext<IAuthContext | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const authToken = localStorage.getItem("auth-token");
-
+  const authToken = getToken();
   const { data } = useGetProfileQuery(authToken ?? skipToken, {
     skip: !authToken,
   });
@@ -29,7 +30,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const contextValue = {
     user: data,
     useLogin,
-    token: authToken ? authToken : undefined,
   };
 
   return (
