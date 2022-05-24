@@ -21,17 +21,29 @@ export function GridColumn({ children }: { children: ReactNode }) {
 
 type InputProps = InputHTMLAttributes<HTMLInputElement>;
 
+type FieldPropType = {
+  type: string;
+  label?: string;
+  // defaults to FormInput
+  component?: ElementType;
+  // defaults to GridColumn
+  composition?: typeof GridRow | typeof GridColumn;
+  inputProps?: InputProps;
+};
+
 export interface SchemaType {
-  fields: Array<{
-    ns: string;
-    type: string;
-    label?: string;
-    // defaults to FormInput
-    component?: ElementType;
-    // defaults to GridColumn
-    composition?: typeof GridRow | typeof GridColumn;
-    inputProps?: InputProps;
-  }>;
+  // fields: Array<{
+  //   ns: string;
+  //   type: string;
+  //   label?: string;
+  //   // defaults to FormInput
+  //   component?: ElementType;
+  //   // defaults to GridColumn
+  //   composition?: typeof GridRow | typeof GridColumn;
+  //   inputProps?: InputProps;
+  // }>;
+
+  fields: { [field: string]: FieldPropType };
   validation: AnyObjectSchema;
 }
 
@@ -59,30 +71,28 @@ export function FormComposition<T>({
   function FormFields() {
     return (
       <>
-        {schema.fields.map(
-          ({
-            ns,
-            component: Component = FormInput,
-            composition: Composition = GridColumn,
-            inputProps,
-            ...rest
-          }) => {
-            // TODO: Fix linting error
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            const error = formErrors[ns];
-            return (
-              <Composition key={ns}>
-                <Component
-                  error={error?.message}
-                  name={ns}
-                  {...inputProps}
-                  {...rest}
-                />
-              </Composition>
-            );
-          }
-        )}
+        {Object.entries(schema.fields).map((field) => {
+          const [name, props] = field;
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const error = formErrors[name];
+
+          const { inputProps, ...rest } = props;
+
+          const Component = props?.component ?? FormInput;
+          const Composition = props?.composition ?? GridColumn;
+
+          return (
+            <Composition key={name}>
+              <Component
+                error={error?.message}
+                name={name}
+                {...inputProps}
+                {...rest}
+              />
+            </Composition>
+          );
+        })}
       </>
     );
   }

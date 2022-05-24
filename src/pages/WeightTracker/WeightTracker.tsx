@@ -1,17 +1,7 @@
 import { styled } from "@stitches/react";
-import { SubmitHandler } from "react-hook-form";
-import format from "date-fns/format";
-import * as yup from "yup";
 
-import {
-  useGetWeightQuery,
-  useAddWeightMutation,
-} from "../../common/utils/api";
-
-import { useAuth } from "../../common/hooks/Auth";
-import { StyledCard } from "../../common/components/StyledCard";
-import { FormComposition } from "../../common/components/FormComposition";
-import { skipToken } from "@reduxjs/toolkit/query";
+import { useGetWeightQuery } from "../../common/utils/api";
+import { AddWeightForm } from "./components/AddWeightForm/AddWeightForm";
 
 const PageTitle = styled("h2", {
   fontSize: " 32px",
@@ -20,60 +10,13 @@ const PageTitle = styled("h2", {
   marginBottom: "$xlg",
 });
 
-interface FormFields {
-  date: Date;
-  weight: number;
-}
-
-const validationScheme = yup.object({
-  weight: yup.number().positive().required().typeError("Weight is required"),
-  date: yup
-    .date()
-    .max(new Date(), "Date is wrong")
-    .default(() => new Date()),
-});
-
-const formSchema = {
-  fields: [
-    {
-      ns: "weight",
-      type: "number",
-      label: "Weight",
-      inputProps: {
-        step: "0.01",
-        min: 0,
-      },
-    },
-    {
-      ns: "date",
-      type: "date",
-      label: "Date",
-      inputProps: {
-        defaultValue: format(new Date(), "yyyy-LL-dd"),
-      },
-    },
-  ],
-  validation: validationScheme,
-};
-
 export function WeightTracker() {
-  const auth = useAuth();
-  const [addWeight] = useAddWeightMutation();
-
-  const { data } = useGetWeightQuery(auth?.token || skipToken);
-
-  const onSubmit: SubmitHandler<FormFields> = (data) => {
-    return addWeight(data);
-  };
+  const { data } = useGetWeightQuery();
 
   return (
     <>
       <PageTitle>Weight tracker</PageTitle>
-      <StyledCard>
-        <h3 color="$primaryText">Add new record</h3>
-        <FormComposition<FormFields> schema={formSchema} submit={onSubmit} />
-      </StyledCard>
-
+      <AddWeightForm />
       {data?.map((result, index) => (
         <div key={index}>
           {result.date} — {result.weight}
